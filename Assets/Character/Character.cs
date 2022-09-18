@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
+    public Slider HpSlider;
+    public Slider MpSlider;
 
     public CharacterStat MaxHp;
     public CharacterStat MaxMp;
@@ -17,7 +20,7 @@ public class Character : MonoBehaviour
     private float m_fHp;
     private float m_fMp;
 
-    private CharacterStat m_pAttack = new(10000);
+    private CharacterStat m_pAttack = new(5500);
     private CharacterStat m_pDefense = new(5000);
     private CharacterStat m_pHit;
     private CharacterStat m_pDodge;
@@ -42,10 +45,14 @@ public class Character : MonoBehaviour
     private void Start()
     {
         m_fHp = MaxHp.Value;
+
+        UpdateHpSlider();
     }
 
     private void Update()
     {
+        UpdateHpSlider();
+
         if (m_fHp <= 0)
         {
             Destroy(gameObject);
@@ -61,6 +68,22 @@ public class Character : MonoBehaviour
         FloatingDamage.Create(transform.position, iDamageTaken);
 
         TakingDamage(iDamageTaken);
+    }
+
+    private void UpdateHpSlider()
+    {
+        if (HpSlider == null) return;
+
+        HpSlider.value = m_fHp;
+        HpSlider.maxValue = MaxHp.Value;
+    }
+
+    private void UpdateMpSlider()
+    {
+        if (MpSlider == null) return;
+
+        MpSlider.value = m_fMp;
+        MpSlider.maxValue = MaxMp.Value;
     }
 
     private int CalculateDamageTaken(Character pEnemy)
